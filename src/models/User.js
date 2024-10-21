@@ -75,10 +75,10 @@ class User {
   static async findAllByStoreId(storeId) {
     try {
       const [rows] = await db.execute(
-        `SELECT u.* 
-         FROM users u
-         JOIN store_users su ON u.id = su.user_id
-         WHERE su.store_id = ?`,
+        `SELECT u.*, su.role 
+        FROM users u
+        JOIN store_users su ON u.id = su.user_id
+        WHERE su.store_id = ?`,
         [storeId]
     );
       return rows;
