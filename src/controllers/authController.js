@@ -14,8 +14,10 @@ exports.register = async (req, res) => {
     await User.create({username, password: passwordHash});
     const user = await User.findByUsername(username);
     const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+     console.log(token);
     res.json({ token });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Error registrando el usuario' });
   }
 };
@@ -30,9 +32,11 @@ exports.login = async (req, res) => {
     if (!(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
+    
     const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.json({ token });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Error del servidor:' });
   }
 };
